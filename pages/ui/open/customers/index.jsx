@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import Insurance from "../insurance";
 const Customers = () => {
   // useEffect(() => {
   //   if (!localStorage.getItem("authToken")) {
@@ -107,7 +107,7 @@ const Customers = () => {
       <div className="container">
         <div className="card">
           <div className="card-header">
-            <h3 className="title">New Patients</h3>
+            <h3 className="title">Register Your Self</h3>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="card-body">
@@ -115,7 +115,7 @@ const Customers = () => {
                 <div className="col-md-6">
                   <div className="form-group">
                     <label htmlFor="">
-                      <b>Patient Name</b>
+                      <b>Your Name</b>
                     </label>
                     <input
                       name="name"
@@ -128,7 +128,7 @@ const Customers = () => {
                 <div className="col-md-6">
                   <div className="form-group">
                     <label htmlFor="">
-                      <b>Patient Email</b>
+                      <b>Your Email</b>
                     </label>
                     <input
                       name="email"
@@ -141,7 +141,7 @@ const Customers = () => {
                 <div className="col-md-6">
                   <div className="form-group">
                     <label htmlFor="">
-                      <b>Patient Password</b>
+                      <b>Your Password</b>
                     </label>
                     <input
                       type="text"
@@ -165,6 +165,7 @@ const Customers = () => {
                     </select>
                   </div>
                 </div>
+                <Insurance />
                 <div className="col-md-6">
                   <button type="submit" className="btn btn-primary my-3">
                     Save

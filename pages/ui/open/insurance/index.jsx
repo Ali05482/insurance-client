@@ -134,33 +134,11 @@ const Insurance = () => {
     <div className="container">
       <div className="card">
         <div className="card-header">
-          <h3 className="title">New Insurances</h3>
+          <h3 className="title">Insurance</h3>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="card-body">
             <div className="row">
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label htmlFor="">
-                    <b>Select Patient</b>
-                  </label>
-                  <select
-                    name="patient"
-                    id="patient"
-                    className="form-control"
-                    onChange={handleChange}
-                  >
-                    <option selected value="">
-                      Choose Patient
-                    </option>
-                    {patients?.map((patient, index) => (
-                      <option key={index} value={patient?._id}>
-                        {patient?.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
               <div className="col-md-6">
                 <div className="form-group">
                   <label htmlFor="">
@@ -186,7 +164,7 @@ const Insurance = () => {
               <div className="col-md-12">
                 <div className="form-group">
                   <label htmlFor="">
-                    <b>Ebter Digital Signature</b>
+                    <b>Enter Digital Signature</b>
                   </label>
                   <div className="form-control">
                     <SignaturePad
@@ -205,35 +183,6 @@ const Insurance = () => {
             </div>
           </div>
         </form>
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title">
-              <b>Selected Plan Details</b>
-            </h3>
-          </div>
-          <div className="card-body">
-            <table className="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Plan Name</th>
-                  <th>Plan Type</th>
-                  <th>Plan Price</th>
-                  <th>Plan Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                {plan && (
-                  <tr>
-                    <td>{plan?.name}</td>
-                    <td>{plan?.type}</td>
-                    <td>{plan?.price}</td>
-                    <td>{plan?.description}</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
       </div>
     </div>
   );
