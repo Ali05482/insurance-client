@@ -16,7 +16,7 @@ const Hospital = () => {
   });
   const fetchHospital = async () => {
     try {
-      const res = await fetch("http://localhost:6001/api/hospital/list");
+      const res = await fetch("https://insurance-server-ten.vercel.app/api/hospital/list");
       const data = await res.json();
       if(data?.status){
         setHospitals(data?.data)
@@ -30,7 +30,7 @@ const Hospital = () => {
   const handleSubmit = async (e) => {
     try {
       e?.preventDefault();
-      const res = await fetch("http://localhost:6001/api/hospital/add", {
+      const res = await fetch("https://insurance-server-ten.vercel.app/api/hospital/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +63,7 @@ const Hospital = () => {
   const handleEditSubmit = async (e) => { 
     try {
       e?.preventDefault();
-      const res = await fetch("http://localhost:6001/api/hospital/update", {
+      const res = await fetch("https://insurance-server-ten.vercel.app/api/hospital/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import Insurance from "../insurance";
+import SignaturePad from "../insurance/signaturePad";
 const Customers = () => {
-  // useEffect(() => {
-  //   if (!localStorage.getItem("authToken")) {
-  //     window.location.href = "/auth/login";
-  //   }
-  // }, []);
+
   const [patients, setPatients] = useState([]);
+  const [plan,setPlan] = useState("");
+  const [hospital,setHospital] = useState("");  
+  const [signature, setSignature] = useState("");
   const [patient, setPatient] = useState({
     name: "",
     email: "",
@@ -14,9 +14,25 @@ const Customers = () => {
     hospital: "",
     password: "",
   });
+  const [plans, setPlans] = useState([]);
+  const fetchPlan = async () => {
+    try {
+      const res = await fetch("https://insurance-server-ten.vercel.app/api/plans/list");
+      const data = await res.json();
+      if (data?.status) {
+        console.log("data?.data[0]?._id", data?.data[0]?._id);
+        setPlans(data?.data);
+        setPlan(data?.data[0]?._id);
+      } else {
+        alert("Error fetching plans");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const fetchPatient = async () => {
     try {
-      const res = await fetch("http://localhost:6001/api/user/list");
+      const res = await fetch("https://insurance-server-ten.vercel.app/api/user/list");
       const data = await res.json();
       if (data?.status) {
         setPatients(data?.data);
@@ -27,10 +43,31 @@ const Customers = () => {
       console.log(error);
     }
   };
+  const handleSubmitInsurance = async (insurance) => {
+    try {
+      const res = await fetch("https://insurance-server-ten.vercel.app/api/insurance/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(insurance),
+      });
+      const data = await res.json();
+      if (data?.status) {
+        alert("Insurance added successfully, Please check your email for verification");
+      } else {
+        console.log(data);
+        alert("Error adding insurance1:Err" + JSON.stringify(data));
+      }
+    } catch (error) {
+      console.log(error?.message);
+      alert("Error adding insurance2", JSON.stringify(error?.message));
+    }
+  };
   const handleSubmit = async (e) => {
     try {
       e?.preventDefault();
-      const res = await fetch("http://localhost:6001/api/register", {
+      const res = await fetch("https://insurance-server-ten.vercel.app/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,8 +76,14 @@ const Customers = () => {
       });
       const data = await res.json();
       if (data?.status) {
+      await handleSubmitInsurance({
+        patient: data?.data?._id,
+        plan: plan,
+        status: "approved",
+        signature: signature,
+        hospital:hospital
+      })
         alert("Patient added successfully");
-        fetchPatient();
       } else {
         alert("Error adding patient1: Err" + JSON.stringify(data));
       }
@@ -50,16 +93,23 @@ const Customers = () => {
     }
   };
   const handleChange = (e) => {
-    setPatient({ ...patient, [e.target.name]: e.target.value });
+    setPatient({ ...patient, [e.target.name]: e.target.value }); 
+    if(e.target.name == "hospital"){
+      setHospital(e?.target?.value);
+    }
+    if(e.target.name == "plan"){
+      setPlan(e?.target?.value);
+    }
   };
   const [hospitals, setHospitals] = useState([]);
   const fetchHospital = async () => {
     try {
-      const res = await fetch("http://localhost:6001/api/hospital/list");
+      const res = await fetch("https://insurance-server-ten.vercel.app/api/hospital/list");
       const data = await res.json();
       if (data?.status) {
         setHospitals(data?.data);
         setPatient({ ...patient, hospital: data?.data[0]?._id });
+        setHospital(data?.data[0]?._id)
       } else {
         alert("Error fetching data");
       }
@@ -70,16 +120,23 @@ const Customers = () => {
   useEffect(() => {
     fetchPatient();
     fetchHospital();
+    fetchPlan();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleEdit = (patient) => {
     setPatient(patient);
     setModal(!modal);
   };
+  const [insurance, setInsurance] = useState({
+    patient: "",
+    plan: "",
+    status: "approved",
+    signature: "",
+  });
   const handleEditSubmit = async (e) => {
     try {
       e?.preventDefault();
-      const res = await fetch("http://localhost:6001/api/user/update", {
+      const res = await fetch("https://insurance-server-ten.vercel.app/api/user/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -141,10 +198,10 @@ const Customers = () => {
                 <div className="col-md-6">
                   <div className="form-group">
                     <label htmlFor="">
-                      <b>Your Password</b>
+                      <b>Your Temporary Password</b>
                     </label>
                     <input
-                      type="text"
+                      type="password"
                       name="password"
                       className="form-control"
                       onChange={handleChange}
@@ -156,7 +213,7 @@ const Customers = () => {
                     <label htmlFor="">
                       <b>Select Hospital</b>
                     </label>
-                    <select name="hospital" className="form-control" id="">
+                    <select onChange={handleChange} name="hospital" className="form-control" id="">
                       {hospitals?.map((hospital, index) => (
                         <option key={index} value={hospital?._id}>
                           {hospital?.name}
@@ -165,7 +222,50 @@ const Customers = () => {
                     </select>
                   </div>
                 </div>
-                <Insurance />
+                <div className="container">
+                  <div className="card">
+                    <div className="card-header">
+                      <h3 className="title">Insurance</h3>
+                    </div>
+                    <div className="card-body">
+                      <div className="row">
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label htmlFor="">
+                              <b>Select Plan</b>
+                            </label>
+                            <select
+                              name="plan"
+                              id="plan"
+                              onChange={handleChange}
+                              className="form-control"
+                            >
+                              {plans?.map((plan, index) => (
+                                <option key={index} value={plan?._id}>
+                                  {plan?.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                        <div className="col-md-12">
+                          <div className="form-group">
+                            <label htmlFor="">
+                              <b>Enter Digital Signature</b>
+                            </label>
+                            <div className="form-control">
+                              <SignaturePad
+                                isEdit={false}
+                                signature={signature} 
+                                setSignature={setSignature}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div className="col-md-6">
                   <button type="submit" className="btn btn-primary my-3">
                     Save

@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 
 import SignaturePad from "./signaturePad";
+import _ from "lodash";
 
-const Insurance = () => {
+const Insurance = ({patient}) => {
   useEffect(() => {
     if (!localStorage.getItem("authToken")) {
       window.location.href = "/auth/login";
@@ -28,7 +29,7 @@ const Insurance = () => {
   const [insurance, setInsurance] = useState({
     patient: "",
     plan: "",
-    status: "pending",
+    status: "approved",
     signature: "",
   });
   const fetchInsurance = async () => {
@@ -47,7 +48,7 @@ const Insurance = () => {
   };
   const handleSubmit = async (e) => {
     try {
-      e?.preventDefault();
+      setInsurance({ ...insurance, patient: patient });
       const res = await fetch("http://localhost:6001/api/insurance/add", {
         method: "POST",
         headers: {
@@ -75,6 +76,12 @@ const Insurance = () => {
     }
     setInsurance({ ...insurance, [e.target.name]: e.target.value });
   };
+  useEffect(() => {
+     if(!_?.isEmpty(patient)){
+      alert(patient)
+      handleSubmit()
+     }
+  }, [patient])
   const [plans, setPlans] = useState([]);
   const [plan, setPlan] = useState([]);
   const fetchPlan = async () => {
@@ -83,6 +90,7 @@ const Insurance = () => {
       const data = await res.json();
       if (data?.status) {
         console.log("data?.data[0]?._id", data?.data[0]?._id);
+        setInsurance({ ...insurance, plan: data?.data[0]?._id});
         setPlans(data?.data);
         setPlan(data?.data[0]);
       } else {
@@ -150,9 +158,6 @@ const Insurance = () => {
                     onChange={handleChange}
                     className="form-control"
                   >
-                    <option selected value="">
-                      Choose Plan
-                    </option>
                     {plans?.map((plan, index) => (
                       <option key={index} value={plan?._id}>
                         {plan?.name}
@@ -174,11 +179,6 @@ const Insurance = () => {
                     />
                   </div>
                 </div>
-              </div>
-              <div className="col-md-6">
-                <button type="submit" className="btn btn-primary my-3">
-                  Save
-                </button>
               </div>
             </div>
           </div>
