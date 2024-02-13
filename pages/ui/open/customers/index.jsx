@@ -97,7 +97,6 @@ const Customers = () => {
     if(e.target.name == "hospital"){
       setHospital(e?.target?.value);
     }
-    if
   };
   const [hospitals, setHospitals] = useState([]);
   const fetchHospital = async () => {
@@ -156,7 +155,7 @@ const Customers = () => {
     }
   };
 
-  
+
 
   const [modal, setModal] = useState(false);
   return (
