@@ -101,7 +101,7 @@ const Customers = () => {
   const [hospitals, setHospitals] = useState([]);
   const fetchHospital = async () => {
     try {
-      const res = await fetch("https://insurance-server-ten.vercel.app/hospital/list");
+      const res = await fetch("https://insurance-server-ten.vercel.app/api/hospital/list");
       const data = await res.json();
       if (data?.status) {
         setHospitals(data?.data);
