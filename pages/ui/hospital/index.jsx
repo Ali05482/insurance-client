@@ -216,8 +216,8 @@ const Hospital = () => {
                 <tr>
                   <th>#</th>
                   <th>Hospital Name</th>
+                  <th>Hospital Contact</th>
                   <th>Hospital Address</th>
-                  <th>Hospital Location</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -226,8 +226,8 @@ const Hospital = () => {
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>{hospital?.name}</td>
-                    <td>{hospital?.address}</td>
                     <td>{hospital?.contact}</td>
+                    <td>{hospital?.address}</td>
                     <td>
                       <button onClick={()=>handleEdit(hospital)} className="btn btn-primary btn-sm mx-3 my-3">
                         Edit
