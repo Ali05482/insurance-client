@@ -271,7 +271,7 @@ const Insurance = () => {
                 <div className="col-md-12">
                   <div className="form-group">
                     <label htmlFor="">
-                      <b>Ebter Digital Signature</b>
+                      <b>Enter Digital Signature</b>
                     </label>
                     <div className="form-control">
                       <SignaturePad
