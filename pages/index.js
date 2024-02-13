@@ -61,7 +61,7 @@ export default function Home() {
   });
   const fetchDashboardInsights = async () => {
     try {
-      const res = await fetch("http://localhost:6001/api/insurance/dashboard");
+      const res = await fetch("https://insurance-server-ten.vercel.app/api/insurance/dashboard");
       const data = await res.json();
       if (data?.status) {
         setDashboardInsights(data?.data)
